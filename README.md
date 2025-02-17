@@ -19,3 +19,5 @@ to generate the new jar and launch it or
     .\start_search.bat
 ```
 If you only want to execute it.
+The folowing image shows the interactive GUI.
+![Alt text](Gui.png "Main view")
