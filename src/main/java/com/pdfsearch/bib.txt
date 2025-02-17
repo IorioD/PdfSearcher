@@ -1,0 +1,78 @@
+A Review: State-of-the-Art of Integrating AI Models with Moving-target Defense for Enhancing IoT Networks Security
+An MTD-driven Hybrid Defense Method Against DDoS Based on Markov Game in Multi-controller SDN-enabled IoT Networks
+Analysis of S-Box Hardware Resources to Improve AES Intrinsic Security Against Power Attacks
+Can Migration-Based Dynamic Platform Technique Work Effectively: A Quantitative Analysis Perspective
+CMTD:A fast Moving Target Defense Scheme based on CFL Authentication
+Cyber Attack Victim Separation: New Dimensions to Minimize Attack Effects by Resource Management
+Deep Reinforcement Learning-Based Moving Target Defense for Multicast in Software-Defined Satellite Networks
+Deep Reinforcement Learning-Based VM Migration for IoT Security
+Deep-Reinforcement-Learning-Based Self-Evolving Moving Target Defense Approach Against Unknown Attacks
+DeepShuffle: A Lightweight Defense Framework against Adversarial Fault Injection Attacks on Deep Neural Networks in Multi-Tenant Cloud-FPGA
+DEFEDGE: Threat-Driven Security Testing and Proactive Defense Identification for Edge-Cloud Systems
+Democratizing Container Live Migration for Enhanced Future Networks - A Survey
+Enabling Moving Target Defense for Real-Time CPS Security
+Enhancing cloud security: harnessing bayesian game theory for a dynamic defense mechanism
+Event-Based Moving Target Defense in Cloud Computing With VM Migration: A Performance Modeling Approach
+Experimental Validation of Cyberattack Detector for Battery Energy Storage-based Virtual Power Plant
+From Seek-and-Destroy to Split-and-Destroy: Connection Partitioning as an Effective Tool against Low-Rate DoS Attacks
+Implementation of a Lossless Moving Target Defense Mechanism
+Lightweight Security for IoT Systems leveraging Moving Target Defense and Intrusion Detection
+Mitigating Adversarial Reconnaissance in IoT Anomaly Detection Systems: A Moving Target Defense Approach based on Reinforcement Learning
+MoFaaS: A Moving Target Defense Approach to Fortify Functions as a Service
+Moving Target Defense (MTD) for 6G Edge-to-Cloud Continuum: A Cognitive Perspective
+Moving Target Defense for Cloud-Native Applications (KUBERNETES)
+Moving Target Defense Through Approximation for Low-Power Neuromorphic Edge Intelligence
+MTFS: a Moving Target Defense-Enabled File System for Malware Mitigation
+Multi-Dimensional Moving Target Defense Method Based on Adaptive Simulated Annealing Genetic Algorithm
+Optimizing Multi-Tier Scheduling and Secure Routing in Edge-Assisted Software-Defined Wireless Sensor Network Environment Using Moving Target Defense and AI Techniques
+Proactive defense mechanism: Enhancing IoT security through diversity-based moving target defense and cyber deception
+Resource-Efficient Low-Rate DDoS Mitigation With Moving Target Defense in Edge Clouds
+RL and Fingerprinting to Select Moving Target Defense Mechanisms for Zero-Day Attacks in IoT
+Safeguarding Privacy and Integrity of Federated Learning in Heterogeneous Cross-Silo IoRT Environments: A Moving Target Defense Approach
+SARM: A network State-Aware Adaptive Routing Mutation method for power IoT
+Securing Forwarding Layers from Eavesdropping Attacks Using Proactive Approaches
+The Role of Deep Learning in Advancing Proactive Cybersecurity Measures for Smart Grid Networks: A Survey
+Thimblerig: A Game-Theoretic, Adaptive, Risk-limiting Security System for Cloud Systems
+Towards adding digital forensics capabilities in software defined networking based moving target defense
+UB-CRAF: A User Behavior-Driven Co-resident Risk Assessment Framework for Dynamically Migrating VMs in Clouds
+
+
+
+
+ static String name1 = path+"A Review State-of-the-Art of Integrating AI Models with Moving-target Defense for Enhancing IoT Networks Security.pdf";
+    static String name2 = path+"An MTD-driven Hybrid Defense Method Against DDoS Based on Markov Game in Multi-controller SDN-enabled IoT Networks.pdf";
+    static String name3 = path+"Analysis of S-Box Hardware Resources to Improve AES Intrinsic Security Against Power Attacks.pdf";
+    static String name4 = path+"Can Migration-Based Dynamic Platform Technique Work Effectively A Quantitative Analysis Perspective.pdf";
+    static String name5 = path+"CMTD A fast Moving Target Defense Scheme based on CFL Authentication.pdf";
+    static String name6 = path+"Cyber Attack Victim Separation New Dimensions to Minimize Attack Effects by Resource Management.pdf";
+    static String name7 = path+"Deep Reinforcement Learning-Based Moving Target Defense for Multicast in Software-Defined Satellite Networks.pdf";
+    static String name8 = path+"Deep Reinforcement Learning-Based VM Migration for IoT Security.pdf";
+    static String name9 = path+"Deep-Reinforcement-Learning-Based Self-Evolving Moving Target Defense Approach Against Unknown Attacks.pdf";
+    static String name10 = path+"DeepShuffle A Lightweight Defense Framework against Adversarial Fault Injection Attacks on Deep Neural Networks in Multi-Tenant Cloud-FPGA.pdf";
+    static String name11 = path+"DEFEDGE Threat-Driven Security Testing and Proactive Defense Identification for Edge-Cloud Systems.pdf";
+    static String name12 = path+"Democratizing Container Live Migration for Enhanced Future Networks - A Survey.pdf";
+    static String name13 = path+"Enabling Moving Target Defense for Real-Time CPS Security.pdf";
+    static String name14 = path+"Enhancing cloud security harnessing bayesian game theory for a dynamic defense mechanism.pdf";
+    static String name15 = path+"Event-Based Moving Target Defense in Cloud Computing With VM Migration A Performance Modeling Approach.pdf";
+    static String name16 = path+"Experimental Validation of Cyberattack Detector for Battery Energy Storage-based Virtual Power Plant.pdf";
+    static String name17 = path+"From Seek-and-Destroy to Split-and-Destroy Connection Partitioning as an Effective Tool against Low-Rate DoS Attacks.pdf";
+    static String name18 = path+"Implementation of a Lossless Moving Target Defense Mechanism.pdf";
+    static String name19 = path+"Lightweight Security for IoT Systems leveraging Moving Target Defense and Intrusion Detection.pdf";
+    static String name20 = path+"Mitigating Adversarial Reconnaissance in IoT Anomaly Detection Systems A Moving Target Defense Approach based on Reinforcement Learning.pdf";
+    static String name21 = path+"MoFaaS A Moving Target Defense Approach to Fortify Functions as a Service.pdf";
+    static String name22 = path+"Moving Target Defense MTD for 6G Edge-to-Cloud Continuum A Cognitive Perspective.pdf";
+    static String name23 = path+"Moving Target Defense for Cloud-Native Applications.pdf";
+    static String name24 = path+"Moving Target Defense Through Approximation for Low-Power Neuromorphic Edge Intelligence.pdf";
+    static String name25 = path+"MTFS a Moving Target Defense-Enabled File System for Malware Mitigation.pdf";
+    static String name26 = path+"Multi-Dimensional Moving Target Defense Method Based on Adaptive Simulated Annealing Genetic Algorithm.pdf";
+    static String name27 = path+"Optimizing Multi-Tier Scheduling and Secure Routing in Edge-Assisted Software-Defined Wireless Sensor Network Environment Using Moving Target Defense and AI Techniques.pdf";
+    static String name28 = path+"Proactive defense mechanism Enhancing IoT security through diversity-based moving target defense and cyber deception.pdf";
+    static String name29 = path+"Resource-Efficient Low-Rate DDoS Mitigation With Moving Target Defense in Edge Clouds.pdf";
+    static String name30 = path+"RL and Fingerprinting to Select Moving Target Defense Mechanisms for Zero-Day Attacks in IoT.pdf";
+    static String name31 = path+"Safeguarding Privacy and Integrity of Federated Learning in Heterogeneous Cross-Silo IoRT Environments A Moving Target Defense Approach.pdf";
+    static String name32 = path+"SARM A network State-Aware Adaptive Routing Mutation method for power IoT.pdf";
+    static String name33 = path+"Securing Forwarding Layers from Eavesdropping Attacks Using Proactive Approaches.pdf";
+    static String name34 = path+"The Role of Deep Learning in Advancing Proactive Cybersecurity Measures for Smart Grid Networks A Survey.pdf";
+    static String name35 = path+"Thimblerig A Game-Theoretic, Adaptive, Risk-limiting Security System for Cloud Systems.pdf";
+    static String name36 = path+"Towards adding digital forensics capabilities in software defined networking based moving target defense.pdf";
+    static String name37 = path+"UB-CRAF A User Behavior-Driven Co-resident Risk Assessment Framework for Dynamically Migrating VMs in Clouds.pdf";
