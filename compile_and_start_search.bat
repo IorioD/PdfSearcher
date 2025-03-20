@@ -1,18 +1,18 @@
 @echo off
 REM Pulisce e compila il progetto
-echo Avvio build con Maven...
+echo Starting Maven build...
 call mvn clean install 
 if %ERRORLEVEL% NEQ 0 (
-    echo Errore durante la compilazione con Maven. Operazione interrotta.
+    echo Error while compiling. Operation aborted.
     pause
     exit /b
 )
 
 REM Esegue il file JAR generato
-echo Avvio applicazione...
+echo Starting application...
 call java -jar .\target\pdf-search.jar
 if %ERRORLEVEL% NEQ 0 (
-    echo Errore durante l'esecuzione dell'applicazione.
+    echo Error during application execution.
     pause
     exit /b
 )
