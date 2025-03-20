@@ -225,17 +225,25 @@ public class PdfSearchGui {
         int selectedRow = resultTable.getSelectedRow();
         if (selectedRow != -1) {
             String fileName = (String) resultTable.getValueAt(selectedRow, 1); // indice col
-            File selectedDirectory = fileChooser.getSelectedFile();
-            File pdfFile = new File(selectedDirectory, fileName);
+            File selectedFileOrDirectory = fileChooser.getSelectedFile();
+            File pdfFile;
+
+            if(selectedFileOrDirectory.isDirectory()){
+                pdfFile=new File(selectedFileOrDirectory, fileName);
+            }else{
+                pdfFile = selectedFileOrDirectory;
+            }
 
             try {
                 if (Desktop.isDesktopSupported() && pdfFile.exists()) {
                     Desktop.getDesktop().open(pdfFile);
                 } else {
-                    JOptionPane.showMessageDialog(null, "Unable to open file: " + pdfFile.getAbsolutePath(), "Error", JOptionPane.ERROR_MESSAGE);
+                    String errorMessage = "<html><body style='width: 300px;'>Unable to open file: " + pdfFile.getAbsolutePath() + "</body></html>";
+                    JOptionPane.showMessageDialog(null, errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (IOException e) {
-                JOptionPane.showMessageDialog(null, "Error opening file: " + pdfFile.getAbsolutePath(), "Error", JOptionPane.ERROR_MESSAGE);
+                String errorMessage = "<html><body style='width: 300px;'>Error opening file: " + pdfFile.getAbsolutePath() + "</body></html>";
+                JOptionPane.showMessageDialog(null, errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
