@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -22,6 +23,8 @@ public class PdfSearchGui {
 
         // Componenti principali
         JTextField searchField = new JTextField();
+        addContextMenu(searchField);
+        
         JFileChooser fileChooser = createFileChooser();
         DefaultTableModel tableModel = createTableModel();
         JTable resultTable = new JTable(tableModel);
@@ -43,8 +46,6 @@ public class PdfSearchGui {
             }
         });
         resultTable.setDefaultRenderer(Object.class, new FileHighlightRenderer());
-        resultTable.setDefaultRenderer(Object.class, new FileHighlightRenderer());
-
         dialog.setVisible(true);
     }
 
@@ -95,6 +96,8 @@ public class PdfSearchGui {
         JPanel buttons = new JPanel();
         JButton searchButton = new JButton("Search");
         JButton closeButton = new JButton("Close");
+
+        searchField.addActionListener(e -> searchButton.doClick());
         buttons.add(searchButton);
         buttons.add(closeButton);
 
@@ -117,6 +120,34 @@ public class PdfSearchGui {
         closeButton.addActionListener(e -> dialog.dispose());
 
         return buttonPanel;
+    }
+
+    private void addContextMenu(JTextField textField) {
+        JPopupMenu menu = new JPopupMenu();
+        JMenuItem cutItem = new JMenuItem(new AbstractAction("Cut") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                textField.cut();
+            }
+        });
+        JMenuItem copyItem = new JMenuItem(new AbstractAction("Copy") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                textField.copy();
+            }
+        });
+        JMenuItem pasteItem = new JMenuItem(new AbstractAction("Paste") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                textField.paste();
+            }
+        });
+
+        menu.add(cutItem);
+        menu.add(copyItem);
+        menu.add(pasteItem);
+
+        textField.setComponentPopupMenu(menu);
     }
 
     private static class FileHighlightRenderer extends DefaultTableCellRenderer {
