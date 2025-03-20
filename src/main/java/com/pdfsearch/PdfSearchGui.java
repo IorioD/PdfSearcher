@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class PdfSearchGui {
     private static final String DEFAULT_PATH = "C:/Users";
-    private static final String[] COLUMN_NAMES = {/*"Riga",*/ "Occurrence", "File"};
+    private static final String[] COLUMN_NAMES = {"Occurrence", "File"};
     private volatile boolean running = false;
 
     public void createAndShowGui() {
