@@ -21,6 +21,7 @@ public class PdfSearchGui {
         dialog.setSize(1000, 800);
         dialog.setLocationRelativeTo(null);
         dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        dialog.setIconImage(new ImageIcon("icon.png").getImage());
 
         // Componenti principali
         JTextField searchField = new JTextField();
