@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -12,6 +13,7 @@ import java.io.IOException;
 public class PdfSearchGui {
     private static final String DEFAULT_PATH = "C:/Users/dany7/Desktop/Uni/Ricerca/Papers";
     private static final String[] COLUMN_NAMES = {/*"Riga",*/ "Occurrence", "File"};
+    private volatile boolean running = false;
 
     public void createAndShowGui() {
         JDialog dialog = new JDialog();
@@ -22,6 +24,8 @@ public class PdfSearchGui {
 
         // Componenti principali
         JTextField searchField = new JTextField();
+        addContextMenu(searchField);
+
         JFileChooser fileChooser = createFileChooser();
         DefaultTableModel tableModel = createTableModel();
         JTable resultTable = new JTable(tableModel);
@@ -42,7 +46,6 @@ public class PdfSearchGui {
                 }
             }
         });
-        resultTable.setDefaultRenderer(Object.class, new FileHighlightRenderer());
         resultTable.setDefaultRenderer(Object.class, new FileHighlightRenderer());
 
         dialog.setVisible(true);
@@ -95,8 +98,13 @@ public class PdfSearchGui {
         JPanel buttons = new JPanel();
         JButton searchButton = new JButton("Search");
         JButton closeButton = new JButton("Close");
+        JButton stopButton = new JButton("Stop");
+        stopButton.setEnabled(false);
+
+        searchField.addActionListener(e -> searchButton.doClick());
         buttons.add(searchButton);
         buttons.add(closeButton);
+        buttons.add(stopButton);
 
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
@@ -113,10 +121,40 @@ public class PdfSearchGui {
         buttonPanel.add(infoPanel, BorderLayout.NORTH);
         buttonPanel.add(progressBar, BorderLayout.SOUTH);
 
-        searchButton.addActionListener(e -> performSearchWithProgress(dialog, searchField, fileChooser, tableModel, fileCountLabel, entryCountLabel, progressBar));
+        searchButton.addActionListener(e -> performSearchWithProgress(dialog, searchField, fileChooser, 
+                                                                        tableModel, fileCountLabel,
+                                                                        entryCountLabel, progressBar, stopButton));
         closeButton.addActionListener(e -> dialog.dispose());
 
         return buttonPanel;
+    }
+
+    private void addContextMenu(JTextField textField) {
+        JPopupMenu menu = new JPopupMenu();
+        JMenuItem cutItem = new JMenuItem(new AbstractAction("Cut") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                textField.cut();
+            }
+        });
+        JMenuItem copyItem = new JMenuItem(new AbstractAction("Copy") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                textField.copy();
+            }
+        });
+        JMenuItem pasteItem = new JMenuItem(new AbstractAction("Paste") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                textField.paste();
+            }
+        });
+
+        menu.add(cutItem);
+        menu.add(copyItem);
+        menu.add(pasteItem);
+
+        textField.setComponentPopupMenu(menu);
     }
 
     private static class FileHighlightRenderer extends DefaultTableCellRenderer {
@@ -141,7 +179,8 @@ public class PdfSearchGui {
     }
 
     private void performSearchWithProgress(JDialog dialog, JTextField searchField, JFileChooser fileChooser,
-                                           DefaultTableModel tableModel, JLabel fileCountLabel, JLabel entryCountLabel, JProgressBar progressBar) {
+                                           DefaultTableModel tableModel, JLabel fileCountLabel, 
+                                           JLabel entryCountLabel, JProgressBar progressBar, JButton stopButton) {
         String searchTerm = searchField.getText().trim();
         if (searchTerm.isEmpty()) {
             JOptionPane.showMessageDialog(dialog, "Please insert a search input.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -156,6 +195,8 @@ public class PdfSearchGui {
 
         progressBar.setVisible(true);
         progressBar.setIndeterminate(true);
+        stopButton.setEnabled(true);
+        running = true;
 
         SwingWorker<Void, Integer> worker = new SwingWorker<>() {
             private int fileCount = 0;
@@ -178,6 +219,7 @@ public class PdfSearchGui {
                     progressBar.setMaximum(fileCount);
 
                     for (int i = 0; i < pdfFiles.length; i++) {
+                        if (!running) break;
                         if (PdfSearcher.searchInFile(pdfFiles[i], searchTerm, tableModel)) {
                             matchingFileCount++;
                         }
@@ -190,6 +232,7 @@ public class PdfSearchGui {
                     progressBar.setIndeterminate(false);
                     progressBar.setMaximum(1);
 
+                    if (!running) return null;
                     if (PdfSearcher.searchInFile(selectedFileOrDirectory, searchTerm, tableModel)) {
                         matchingFileCount++;
                     }
@@ -209,6 +252,7 @@ public class PdfSearchGui {
             @Override
             protected void done() {
                 progressBar.setVisible(false);
+                stopButton.setEnabled(false);
                 fileCountLabel.setText("Scanned file: " + fileCount);
                 entryCountLabel.setText("File with results: " + matchingFileCount + " | Entry found: " + entryCount);
 
@@ -218,6 +262,11 @@ public class PdfSearchGui {
             }
         };
 
+        stopButton.addActionListener(e -> {
+            running = false;
+            stopButton.setEnabled(false);
+        });
+
         worker.execute();
     }
 
@@ -225,17 +274,25 @@ public class PdfSearchGui {
         int selectedRow = resultTable.getSelectedRow();
         if (selectedRow != -1) {
             String fileName = (String) resultTable.getValueAt(selectedRow, 1); // indice col
-            File selectedDirectory = fileChooser.getSelectedFile();
-            File pdfFile = new File(selectedDirectory, fileName);
+            File selectedFileOrDirectory = fileChooser.getSelectedFile();
+            File pdfFile;
+
+            if(selectedFileOrDirectory.isDirectory()){
+                pdfFile=new File(selectedFileOrDirectory, fileName);
+            }else{
+                pdfFile = selectedFileOrDirectory;
+            }
 
             try {
                 if (Desktop.isDesktopSupported() && pdfFile.exists()) {
                     Desktop.getDesktop().open(pdfFile);
                 } else {
-                    JOptionPane.showMessageDialog(null, "Unable to open file: " + pdfFile.getAbsolutePath(), "Error", JOptionPane.ERROR_MESSAGE);
+                    String errorMessage = "<html><body style='width: 300px;'>Unable to open file: " + pdfFile.getAbsolutePath() + "</body></html>";
+                    JOptionPane.showMessageDialog(null, errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (IOException e) {
-                JOptionPane.showMessageDialog(null, "Error opening file: " + pdfFile.getAbsolutePath(), "Error", JOptionPane.ERROR_MESSAGE);
+                String errorMessage = "<html><body style='width: 300px;'>Error opening file: " + pdfFile.getAbsolutePath() + "</body></html>";
+                JOptionPane.showMessageDialog(null, errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
