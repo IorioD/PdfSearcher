@@ -16,12 +16,12 @@ public class PdfSearchGui {
     private volatile boolean running = false;
 
     public void createAndShowGui() {
-        JDialog dialog = new JDialog();
-        dialog.setTitle("PDF Searcher");
-        dialog.setSize(1000, 800);
-        dialog.setLocationRelativeTo(null);
-        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        dialog.setIconImage(new ImageIcon("icon.png").getImage());
+        JFrame frame = new JFrame();
+        frame.setTitle("PDF Searcher");
+        frame.setSize(1000, 800);
+        frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setIconImage(new ImageIcon("icon.png").getImage());
 
         // Componenti principali
         JTextField searchField = new JTextField();
@@ -34,10 +34,10 @@ public class PdfSearchGui {
         JLabel entryCountLabel = new JLabel("File with results: 0 | Entry found: 0");
 
         // Layout principale
-        dialog.setLayout(new BorderLayout());
-        dialog.add(createTopPanel(searchField, fileChooser), BorderLayout.NORTH);
-        dialog.add(createResultPane(resultTable), BorderLayout.CENTER);
-        dialog.add(createButtonPanel(dialog, searchField, fileChooser, tableModel, fileCountLabel, entryCountLabel), BorderLayout.SOUTH);
+        frame.setLayout(new BorderLayout());
+        frame.add(createTopPanel(searchField, fileChooser), BorderLayout.NORTH);
+        frame.add(createResultPane(resultTable), BorderLayout.CENTER);
+        frame.add(createButtonPanel(frame, searchField, fileChooser, tableModel, fileCountLabel, entryCountLabel), BorderLayout.SOUTH);
 
         resultTable.addMouseListener(new MouseAdapter() {
             @Override
@@ -48,7 +48,7 @@ public class PdfSearchGui {
             }
         });
         resultTable.setDefaultRenderer(Object.class, new FileHighlightRenderer());
-        dialog.setVisible(true);
+        frame.setVisible(true);
     }
 
     private JFileChooser createFileChooser() {
@@ -92,7 +92,7 @@ public class PdfSearchGui {
         return new JScrollPane(resultTable);
     }
 
-    private JPanel createButtonPanel(JDialog dialog, JTextField searchField, JFileChooser fileChooser,
+    private JPanel createButtonPanel(JFrame frame, JTextField searchField, JFileChooser fileChooser,
                                      DefaultTableModel tableModel, JLabel fileCountLabel, JLabel entryCountLabel) {
         JPanel buttonPanel = new JPanel(new BorderLayout());
         JPanel buttons = new JPanel();
@@ -121,10 +121,10 @@ public class PdfSearchGui {
         buttonPanel.add(infoPanel, BorderLayout.NORTH);
         buttonPanel.add(progressBar, BorderLayout.SOUTH);
 
-        searchButton.addActionListener(e -> performSearchWithProgress(dialog, searchField, fileChooser, 
+        searchButton.addActionListener(e -> performSearchWithProgress(frame, searchField, fileChooser, 
                                                                         tableModel, fileCountLabel,
                                                                          entryCountLabel, progressBar, stopButton));
-        closeButton.addActionListener(e -> dialog.dispose());
+        closeButton.addActionListener(e -> frame.dispose());
 
         return buttonPanel;
     }
@@ -178,18 +178,18 @@ public class PdfSearchGui {
         }
     }
 
-    private void performSearchWithProgress(JDialog dialog, JTextField searchField, JFileChooser fileChooser,
+    private void performSearchWithProgress(JFrame frame, JTextField searchField, JFileChooser fileChooser,
                                            DefaultTableModel tableModel, JLabel fileCountLabel, 
                                            JLabel entryCountLabel, JProgressBar progressBar, JButton stopButton) {
         String searchTerm = searchField.getText().trim();
         if (searchTerm.isEmpty()) {
-            JOptionPane.showMessageDialog(dialog, "Please insert a search input.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Please insert a search input.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         File selectedFileOrDirectory = fileChooser.getSelectedFile();
         if (selectedFileOrDirectory == null) {
-            JOptionPane.showMessageDialog(dialog, "Please select a valid file or directory.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Please select a valid file or directory.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -210,7 +210,7 @@ public class PdfSearchGui {
                 if (selectedFileOrDirectory.isDirectory()) {
                     File[] pdfFiles = selectedFileOrDirectory.listFiles((dir, name) -> name.toLowerCase().endsWith(".pdf"));
                     if (pdfFiles == null || pdfFiles.length == 0) {
-                        JOptionPane.showMessageDialog(dialog, "No PDF file found in the selected directory.", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(frame, "No PDF file found in the selected directory.", "Error", JOptionPane.ERROR_MESSAGE);
                         return null;
                     }
                     fileCount = pdfFiles.length;
@@ -257,7 +257,7 @@ public class PdfSearchGui {
                 entryCountLabel.setText("File with results: " + matchingFileCount + " | Entry found: " + entryCount);
 
                 if (entryCount == 0) {
-                    JOptionPane.showMessageDialog(dialog, "Search term \"" + searchTerm + "\" not found.", "Risults", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(frame, "Search term \"" + searchTerm + "\" not found.", "Risults", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         };
