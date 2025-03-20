@@ -11,13 +11,13 @@ import java.io.File;
 import java.io.IOException;
 
 public class PdfSearchGui {
-    private static final String DEFAULT_PATH = "C:/Users/dany7/Desktop/Uni/Ricerca/Papers";
+    private static final String DEFAULT_PATH = "C:/Users";
     private static final String[] COLUMN_NAMES = {/*"Riga",*/ "Occurrence", "File"};
     private volatile boolean running = false;
 
     public void createAndShowGui() {
         JDialog dialog = new JDialog();
-        dialog.setTitle("Select directory and search input");
+        dialog.setTitle("PDF Searcher");
         dialog.setSize(1000, 800);
         dialog.setLocationRelativeTo(null);
         dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
