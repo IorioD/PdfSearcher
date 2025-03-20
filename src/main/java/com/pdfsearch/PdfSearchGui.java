@@ -13,6 +13,7 @@ import java.io.IOException;
 public class PdfSearchGui {
     private static final String DEFAULT_PATH = "C:/Users/dany7/Desktop/Uni/Ricerca/Papers";
     private static final String[] COLUMN_NAMES = {/*"Riga",*/ "Occurrence", "File"};
+    private volatile boolean running = false;
 
     public void createAndShowGui() {
         JDialog dialog = new JDialog();
@@ -96,10 +97,13 @@ public class PdfSearchGui {
         JPanel buttons = new JPanel();
         JButton searchButton = new JButton("Search");
         JButton closeButton = new JButton("Close");
+        JButton stopButton = new JButton("Stop");
+        stopButton.setEnabled(false);
 
         searchField.addActionListener(e -> searchButton.doClick());
         buttons.add(searchButton);
         buttons.add(closeButton);
+        buttons.add(stopButton);
 
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
@@ -116,7 +120,9 @@ public class PdfSearchGui {
         buttonPanel.add(infoPanel, BorderLayout.NORTH);
         buttonPanel.add(progressBar, BorderLayout.SOUTH);
 
-        searchButton.addActionListener(e -> performSearchWithProgress(dialog, searchField, fileChooser, tableModel, fileCountLabel, entryCountLabel, progressBar));
+        searchButton.addActionListener(e -> performSearchWithProgress(dialog, searchField, fileChooser, 
+                                                                        tableModel, fileCountLabel,
+                                                                         entryCountLabel, progressBar, stopButton));
         closeButton.addActionListener(e -> dialog.dispose());
 
         return buttonPanel;
@@ -172,7 +178,8 @@ public class PdfSearchGui {
     }
 
     private void performSearchWithProgress(JDialog dialog, JTextField searchField, JFileChooser fileChooser,
-                                           DefaultTableModel tableModel, JLabel fileCountLabel, JLabel entryCountLabel, JProgressBar progressBar) {
+                                           DefaultTableModel tableModel, JLabel fileCountLabel, 
+                                           JLabel entryCountLabel, JProgressBar progressBar, JButton stopButton) {
         String searchTerm = searchField.getText().trim();
         if (searchTerm.isEmpty()) {
             JOptionPane.showMessageDialog(dialog, "Please insert a search input.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -187,6 +194,8 @@ public class PdfSearchGui {
 
         progressBar.setVisible(true);
         progressBar.setIndeterminate(true);
+        stopButton.setEnabled(true);
+        running = true;
 
         SwingWorker<Void, Integer> worker = new SwingWorker<>() {
             private int fileCount = 0;
@@ -209,6 +218,7 @@ public class PdfSearchGui {
                     progressBar.setMaximum(fileCount);
 
                     for (int i = 0; i < pdfFiles.length; i++) {
+                        if (!running) break;
                         if (PdfSearcher.searchInFile(pdfFiles[i], searchTerm, tableModel)) {
                             matchingFileCount++;
                         }
@@ -217,10 +227,11 @@ public class PdfSearchGui {
                     }
                 } else if (selectedFileOrDirectory.isFile() && selectedFileOrDirectory.getName().toLowerCase().endsWith(".pdf")) {
                     fileCount = 1;
-
+                    
                     progressBar.setIndeterminate(false);
                     progressBar.setMaximum(1);
 
+                    if (!running) return null;
                     if (PdfSearcher.searchInFile(selectedFileOrDirectory, searchTerm, tableModel)) {
                         matchingFileCount++;
                     }
@@ -240,6 +251,7 @@ public class PdfSearchGui {
             @Override
             protected void done() {
                 progressBar.setVisible(false);
+                stopButton.setEnabled(false);
                 fileCountLabel.setText("Scanned file: " + fileCount);
                 entryCountLabel.setText("File with results: " + matchingFileCount + " | Entry found: " + entryCount);
 
@@ -248,6 +260,11 @@ public class PdfSearchGui {
                 }
             }
         };
+        
+        stopButton.addActionListener(e -> {
+            running = false;
+            stopButton.setEnabled(false);
+        });
 
         worker.execute();
     }
