@@ -79,7 +79,7 @@ public class PdfSearchGui {
         chooser.addChoosableFileFilter(new FileNameExtensionFilter("OpenOffice Text (*.odt)", "odt"));
         chooser.addChoosableFileFilter(new FileNameExtensionFilter("OpenOffice Spreadsheets (*.ods)", "ods"));
         chooser.addChoosableFileFilter(new FileNameExtensionFilter("OpenOffice Presentations (*.odp)", "odp"));
-
+        chooser.addChoosableFileFilter(new FileNameExtensionFilter("BibTeX (*.bib)", "bib"));
 
         File initialDirectory = new File(DEFAULT_PATH);
         if (initialDirectory.exists() && initialDirectory.isDirectory()) {
@@ -255,7 +255,8 @@ public class PdfSearchGui {
                             lower.endsWith(".yml") || lower.endsWith(".js") || lower.endsWith(".csv") || 
                             lower.endsWith(".xls") || lower.endsWith(".xlsx") || lower.endsWith(".doc") ||
                             lower.endsWith(".docx") || lower.endsWith(".ppt") || lower.endsWith(".pptx") ||
-                            lower.endsWith(".odt") || lower.endsWith(".ods") || lower.endsWith(".odp");
+                            lower.endsWith(".odt") || lower.endsWith(".ods") || lower.endsWith(".odp") ||
+                            lower.endsWith(".bib");
                     }); 
                     if (file == null || file.length == 0) {
                         JOptionPane.showMessageDialog(frame, "No supported file found in the selected directory.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -294,7 +295,8 @@ public class PdfSearchGui {
                                                                 selectedFileOrDirectory.getName().toLowerCase().endsWith(".pptx") ||
                                                                 selectedFileOrDirectory.getName().toLowerCase().endsWith(".odt") ||
                                                                 selectedFileOrDirectory.getName().toLowerCase().endsWith(".ods") ||
-                                                                selectedFileOrDirectory.getName().toLowerCase().endsWith(".odp")
+                                                                selectedFileOrDirectory.getName().toLowerCase().endsWith(".odp") ||
+                                                                selectedFileOrDirectory.getName().toLowerCase().endsWith(".bib")
                                                                 ) {
                     fileCount = 1;
 
