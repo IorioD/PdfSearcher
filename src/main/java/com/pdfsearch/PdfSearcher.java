@@ -54,8 +54,8 @@ public class PdfSearcher {
                     extension.equals("json") ||
                     extension.equals("yaml") ||
                     extension.equals("yml") ||
-                    extension.equals("js")
-
+                    extension.equals("js") ||
+                    extension.equals("bib")
                 ){
             try {
                 lines = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8).toArray(new String[0]);
