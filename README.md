@@ -21,6 +21,6 @@ to generate the new jar and launch it or
 If you only want to execute it.
 
 The following image shows the interactive GUI.
-
+![Alt text](Gui1.png "Home page")
 
 Once the search is completed, you can directly open the file by double-clicking on the corresponding "file" cell of the results table.
