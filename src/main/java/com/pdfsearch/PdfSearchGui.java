@@ -258,7 +258,7 @@ public class PdfSearchGui {
                             lower.endsWith(".odt") || lower.endsWith(".ods") || lower.endsWith(".odp");
                     }); 
                     if (file == null || file.length == 0) {
-                        JOptionPane.showMessageDialog(frame, "No PDF file found in the selected directory.", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(frame, "No supported file found in the selected directory.", "Error", JOptionPane.ERROR_MESSAGE);
                         return null;
                     }
                     fileCount = file.length;
