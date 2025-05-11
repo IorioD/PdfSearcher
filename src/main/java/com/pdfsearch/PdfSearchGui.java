@@ -14,6 +14,8 @@ public class PdfSearchGui {
     private static final String DEFAULT_PATH = "C:/Users";
     private static final String[] COLUMN_NAMES = {"Occurrence", "File"};
     private volatile boolean running = false;
+    private JCheckBox caseSensitiveCheckBox;
+    private JCheckBox wholeWordCheckBox;
 
     public void createAndShowGui() {
         JFrame frame = new JFrame();
@@ -21,12 +23,15 @@ public class PdfSearchGui {
         frame.setSize(1000, 800);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setIconImage(new ImageIcon("icon.png").getImage());
+
+        frame.setIconImage(new ImageIcon(getClass().getResource("/icon.png")).getImage());
+        frame.setVisible(true);
+        frame.setExtendedState(JFrame.NORMAL);
 
         // Componenti principali
         JTextField searchField = new JTextField();
         addContextMenu(searchField);
-        
+
         JFileChooser fileChooser = createFileChooser();
         DefaultTableModel tableModel = createTableModel();
         JTable resultTable = new JTable(tableModel);
@@ -48,6 +53,7 @@ public class PdfSearchGui {
             }
         });
         resultTable.setDefaultRenderer(Object.class, new FileHighlightRenderer());
+
         frame.setVisible(true);
     }
 
@@ -55,7 +61,24 @@ public class PdfSearchGui {
         JFileChooser chooser = new JFileChooser();
         chooser.setControlButtonsAreShown(false);
         chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("PDF Files", "pdf"));
+        chooser.addChoosableFileFilter(new FileNameExtensionFilter("PDF Files (*.pdf)", "pdf"));
+        chooser.addChoosableFileFilter(new FileNameExtensionFilter("Text Files (*.txt)", "txt"));
+        chooser.addChoosableFileFilter(new FileNameExtensionFilter("Markdown Files (*.md)", "md"));
+        chooser.addChoosableFileFilter(new FileNameExtensionFilter("Java Files (*.java)", "java"));
+        chooser.addChoosableFileFilter(new FileNameExtensionFilter("XML Files (*.xml)", "xml"));
+        chooser.addChoosableFileFilter(new FileNameExtensionFilter("HTML Files (*.html)", "html"));
+        chooser.addChoosableFileFilter(new FileNameExtensionFilter("Log Files (*.log)", "log"));
+        chooser.addChoosableFileFilter(new FileNameExtensionFilter("JSON Files (*.json)", "json"));
+        chooser.addChoosableFileFilter(new FileNameExtensionFilter("YAML Files (*.yaml, *.yml)", "yaml", "yml"));
+        chooser.addChoosableFileFilter(new FileNameExtensionFilter("JavaScript Files (*.js)", "js"));
+        chooser.addChoosableFileFilter(new FileNameExtensionFilter("CSV Files (*.csv)", "csv"));
+        chooser.addChoosableFileFilter(new FileNameExtensionFilter("Excel Files (*.xls, *.xlsx)", "xls", "xlsx"));
+        chooser.addChoosableFileFilter(new FileNameExtensionFilter("Word Documents (*.doc, *.docx)", "doc", "docx"));
+        chooser.addChoosableFileFilter(new FileNameExtensionFilter("PowerPoint Presentations (*.ppt, *.pptx)", "ppt", "pptx"));
+        chooser.addChoosableFileFilter(new FileNameExtensionFilter("OpenOffice Text (*.odt)", "odt"));
+        chooser.addChoosableFileFilter(new FileNameExtensionFilter("OpenOffice Spreadsheets (*.ods)", "ods"));
+        chooser.addChoosableFileFilter(new FileNameExtensionFilter("OpenOffice Presentations (*.odp)", "odp"));
+
 
         File initialDirectory = new File(DEFAULT_PATH);
         if (initialDirectory.exists() && initialDirectory.isDirectory()) {
@@ -80,6 +103,16 @@ public class PdfSearchGui {
         JPanel searchPanel = new JPanel(new BorderLayout());
         searchPanel.add(new JLabel("Insert the search input:"), BorderLayout.NORTH);
         searchPanel.add(searchField, BorderLayout.CENTER);
+
+        JPanel optionsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JCheckBox caseSensitiveCheckBox = new JCheckBox("Case sensitive");
+        JCheckBox wholeWordCheckBox = new JCheckBox("Whole word");
+        optionsPanel.add(caseSensitiveCheckBox);
+        optionsPanel.add(wholeWordCheckBox);
+        searchPanel.add(optionsPanel, BorderLayout.SOUTH);
+
+        this.caseSensitiveCheckBox = caseSensitiveCheckBox;
+        this.wholeWordCheckBox = wholeWordCheckBox;
 
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.add(searchPanel, BorderLayout.NORTH);
@@ -123,7 +156,8 @@ public class PdfSearchGui {
 
         searchButton.addActionListener(e -> performSearchWithProgress(frame, searchField, fileChooser, 
                                                                         tableModel, fileCountLabel,
-                                                                         entryCountLabel, progressBar, stopButton));
+                                                                        entryCountLabel, progressBar, stopButton,
+                                                                        caseSensitiveCheckBox, wholeWordCheckBox));
         closeButton.addActionListener(e -> frame.dispose());
 
         return buttonPanel;
@@ -180,7 +214,8 @@ public class PdfSearchGui {
 
     private void performSearchWithProgress(JFrame frame, JTextField searchField, JFileChooser fileChooser,
                                            DefaultTableModel tableModel, JLabel fileCountLabel, 
-                                           JLabel entryCountLabel, JProgressBar progressBar, JButton stopButton) {
+                                           JLabel entryCountLabel, JProgressBar progressBar, JButton stopButton,
+                                           JCheckBox caseSensitiveCheckBox, JCheckBox wholeWordCheckBox) {
         String searchTerm = searchField.getText().trim();
         if (searchTerm.isEmpty()) {
             JOptionPane.showMessageDialog(frame, "Please insert a search input.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -203,37 +238,70 @@ public class PdfSearchGui {
             private int entryCount = 0;
             private int matchingFileCount = 0;
 
+            boolean caseSensitive = caseSensitiveCheckBox.isSelected();
+            boolean wholeWord = wholeWordCheckBox.isSelected();
+
             @Override
             protected Void doInBackground() throws Exception {
                 tableModel.setRowCount(0);
 
                 if (selectedFileOrDirectory.isDirectory()) {
-                    File[] pdfFiles = selectedFileOrDirectory.listFiles((dir, name) -> name.toLowerCase().endsWith(".pdf"));
-                    if (pdfFiles == null || pdfFiles.length == 0) {
+                    File[] file = selectedFileOrDirectory.listFiles((dir, name) -> {
+                            String lower = name.toLowerCase();
+                            return lower.endsWith(".pdf") || lower.endsWith(".txt") || lower.endsWith(".md") ||
+                            lower.endsWith(".java") || lower.endsWith(".xml") || lower.endsWith(".log")|| 
+                            lower.endsWith(".html") || lower.endsWith(".json") || lower.endsWith(".yaml") || 
+                            lower.endsWith(".yml") || lower.endsWith(".js") || lower.endsWith(".csv") || 
+                            lower.endsWith(".xls") || lower.endsWith(".xlsx") || lower.endsWith(".doc") ||
+                            lower.endsWith(".docx") || lower.endsWith(".ppt") || lower.endsWith(".pptx") ||
+                            lower.endsWith(".odt") || lower.endsWith(".ods") || lower.endsWith(".odp");
+                    }); 
+                    if (file == null || file.length == 0) {
                         JOptionPane.showMessageDialog(frame, "No PDF file found in the selected directory.", "Error", JOptionPane.ERROR_MESSAGE);
                         return null;
                     }
-                    fileCount = pdfFiles.length;
+                    fileCount = file.length;
 
                     progressBar.setIndeterminate(false);
                     progressBar.setMaximum(fileCount);
 
-                    for (int i = 0; i < pdfFiles.length; i++) {
+                    for (int i = 0; i < file.length; i++) {
                         if (!running) break;
-                        if (PdfSearcher.searchInFile(pdfFiles[i], searchTerm, tableModel)) {
+                        if (PdfSearcher.searchInFile(file[i], searchTerm, tableModel, caseSensitive, wholeWord)) {
                             matchingFileCount++;
                         }
                         entryCount = tableModel.getRowCount();
                         publish(i + 1); //aggiorna progresso
                     }
-                } else if (selectedFileOrDirectory.isFile() && selectedFileOrDirectory.getName().toLowerCase().endsWith(".pdf")) {
+                } else if (selectedFileOrDirectory.isFile() && selectedFileOrDirectory.getName().toLowerCase().endsWith(".pdf") ||
+                                                                selectedFileOrDirectory.getName().toLowerCase().endsWith(".txt") ||
+                                                                selectedFileOrDirectory.getName().toLowerCase().endsWith(".md") ||
+                                                                selectedFileOrDirectory.getName().toLowerCase().endsWith(".java") ||
+                                                                selectedFileOrDirectory.getName().toLowerCase().endsWith(".xml") ||
+                                                                selectedFileOrDirectory.getName().toLowerCase().endsWith(".html") ||
+                                                                selectedFileOrDirectory.getName().toLowerCase().endsWith(".log") ||
+                                                                selectedFileOrDirectory.getName().toLowerCase().endsWith(".json") ||
+                                                                selectedFileOrDirectory.getName().toLowerCase().endsWith(".yaml") ||
+                                                                selectedFileOrDirectory.getName().toLowerCase().endsWith(".yml") ||
+                                                                selectedFileOrDirectory.getName().toLowerCase().endsWith(".js") ||
+                                                                selectedFileOrDirectory.getName().toLowerCase().endsWith(".csv") ||
+                                                                selectedFileOrDirectory.getName().toLowerCase().endsWith(".xls") ||
+                                                                selectedFileOrDirectory.getName().toLowerCase().endsWith(".xlsx") ||
+                                                                selectedFileOrDirectory.getName().toLowerCase().endsWith(".doc") ||
+                                                                selectedFileOrDirectory.getName().toLowerCase().endsWith(".docx") ||
+                                                                selectedFileOrDirectory.getName().toLowerCase().endsWith(".ppt") ||
+                                                                selectedFileOrDirectory.getName().toLowerCase().endsWith(".pptx") ||
+                                                                selectedFileOrDirectory.getName().toLowerCase().endsWith(".odt") ||
+                                                                selectedFileOrDirectory.getName().toLowerCase().endsWith(".ods") ||
+                                                                selectedFileOrDirectory.getName().toLowerCase().endsWith(".odp")
+                                                                ) {
                     fileCount = 1;
-                    
+
                     progressBar.setIndeterminate(false);
                     progressBar.setMaximum(1);
 
                     if (!running) return null;
-                    if (PdfSearcher.searchInFile(selectedFileOrDirectory, searchTerm, tableModel)) {
+                    if (PdfSearcher.searchInFile(selectedFileOrDirectory, searchTerm, tableModel, caseSensitive, wholeWord)) {
                         matchingFileCount++;
                     }
                     entryCount = tableModel.getRowCount();
@@ -261,7 +329,7 @@ public class PdfSearchGui {
                 }
             }
         };
-        
+
         stopButton.addActionListener(e -> {
             running = false;
             stopButton.setEnabled(false);
