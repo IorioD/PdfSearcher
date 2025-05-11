@@ -23,4 +23,24 @@ If you only want to execute it.
 The following image shows the interactive GUI.
 ![Alt text](Gui1.png "Home page")
 
+The actual supported files are:
+- PDF Files (*.pdf)
+- Text Files (*.txt)
+- Markdown Files (*.md)
+- Java Files (*.java)
+- XML Files (*.xml)
+- HTML Files (*.html)
+- Log Files (*.log)
+- JSON Files (*.json)
+- YAML Files (*.yaml, *.yml)
+- JavaScript Files (*.js)
+- CSV Files (*.csv)
+- Excel Files (*.xls, *.xlsx)
+- Word Documents (*.doc, *.docx)
+- PowerPoint Presentations (*.ppt, *.pptx)
+- OpenOffice Text (*.odt)
+- OpenOffice Spreadsheets (*.ods)
+- OpenOffice Presentations (*.odp)
+- BibTeX (*.bib)
+
 Once the search is completed, you can directly open the file by double-clicking on the corresponding "file" cell of the results table.
