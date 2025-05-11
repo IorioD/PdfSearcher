@@ -106,7 +106,7 @@ public class PdfSearchGui {
         searchPanel.add(searchField, BorderLayout.CENTER);
 
         JPanel optionsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JCheckBox caseSensitiveCheckBox = new JCheckBox("Case sensitive");
+        JCheckBox caseSensitiveCheckBox = new JCheckBox("Match case");
         JCheckBox wholeWordCheckBox = new JCheckBox("Whole word");
         optionsPanel.add(caseSensitiveCheckBox);
         optionsPanel.add(wholeWordCheckBox);
