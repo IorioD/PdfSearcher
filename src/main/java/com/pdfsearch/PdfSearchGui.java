@@ -13,21 +13,14 @@ import java.io.IOException;
 
 public class PdfSearchGui {
     private static final String DEFAULT_PATH = "C:/Users/dany7/Desktop/Uni/Ricerca/Papers";
-    private static final String[] COLUMN_NAMES = {"Occurrence", "File"};
-    private volatile boolean running = false;
-    private JCheckBox caseSensitiveCheckBox;
-    private JCheckBox wholeWordCheckBox;
+    private static final String[] COLUMN_NAMES = {/*"Riga",*/ "Occurrence", "File"};
 
     public void createAndShowGui() {
-        JFrame frame = new JFrame();
-        frame.setTitle("PDF Searcher");
-        frame.setSize(1000, 600);
-        frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-        frame.setIconImage(new ImageIcon(getClass().getResource("/icon.png")).getImage());
-        frame.setVisible(true);
-        frame.setExtendedState(JFrame.NORMAL);
+        JDialog dialog = new JDialog();
+        dialog.setTitle("Select directory and search input");
+        dialog.setSize(1000, 800);
+        dialog.setLocationRelativeTo(null);
+        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
         // Componenti principali
         JTextField searchField = new JTextField();
