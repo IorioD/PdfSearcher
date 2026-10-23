@@ -12,15 +12,18 @@ import java.io.File;
 import java.io.IOException;
 
 public class PdfSearchGui {
+    private JCheckBox caseSensitiveCheckBox;
+    private JCheckBox wholeWordCheckBox;
+    private volatile boolean running;
     private static final String DEFAULT_PATH = "C:/Users/dany7/Desktop/Uni/Ricerca/Papers";
     private static final String[] COLUMN_NAMES = {/*"Riga",*/ "Occurrence", "File"};
 
     public void createAndShowGui() {
-        JDialog dialog = new JDialog();
-        dialog.setTitle("Select directory and search input");
-        dialog.setSize(1000, 800);
-        dialog.setLocationRelativeTo(null);
-        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        JFrame frame = new JFrame();
+        frame.setTitle("Select directory and search input");
+        frame.setSize(1000, 500);
+        frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         // Componenti principali
         JTextField searchField = new JTextField();
